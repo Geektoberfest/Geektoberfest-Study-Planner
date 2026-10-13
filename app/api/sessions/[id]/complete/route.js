@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import StudySession from "@/models/StudySession";
@@ -13,7 +12,9 @@ export async function POST(request, { params }) {
   try {
     const user = await getAuthUser();
 
-    if (!user) return unauthorized();
+    if (!user) {
+      return unauthorized();
+    }
 
     await dbConnect();
 
@@ -83,14 +84,14 @@ export async function POST(request, { params }) {
 
     await session.save();
 
-    // Determine topic completion using actual study minutes.
+    // Calculate topic completion using actual study minutes.
     if (session.topicId) {
       const topic = await Topic.findOne({
         _id: session.topicId,
         userId: user._id,
       });
 
-      // Do not undo an existing completion.
+      // Preserve an existing completion status.
       if (topic && !topic.completed) {
         const completedSessions = await StudySession.find({
           userId: user._id,
@@ -103,7 +104,7 @@ export async function POST(request, { params }) {
         if (
           shouldCompleteTopic(
             completedSessions,
-            topic.estimatedMinutes || 0
+            topic.estimatedMinutes
           )
         ) {
           topic.completed = true;
