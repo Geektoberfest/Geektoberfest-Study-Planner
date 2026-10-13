@@ -39,3 +39,20 @@ test("does not complete a topic when actual time is below the estimate", () => {
 
   assert.equal(shouldCompleteTopic(sessions, 60), false);
 });
+
+test("does not complete a topic with zero estimated minutes", () => {
+  const sessions = [{ actualMinutes: 60 }];
+
+  assert.equal(shouldCompleteTopic(sessions, 0), false);
+});
+
+test("ignores invalid actual minutes", () => {
+  const sessions = [
+    { actualMinutes: 30 },
+    { actualMinutes: -10 },
+    { actualMinutes: "40" },
+    {},
+  ];
+
+  assert.equal(shouldCompleteTopic(sessions, 60), false);
+});
