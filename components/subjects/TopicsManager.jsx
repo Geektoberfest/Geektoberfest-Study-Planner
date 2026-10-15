@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, ConfirmDialog } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/toast";
 import { AiTopicGenerator } from "./AiTopicGenerator";
+import { BulkTopicImport } from "./BulkTopicImport";
 import { TopicForm } from "./TopicForm";
 
 export function TopicsManager({ subject, topics, onChanged, showCompletedToggle = true }) {
@@ -76,6 +77,8 @@ export function TopicsManager({ subject, topics, onChanged, showCompletedToggle 
   return (
     <div className="space-y-5">
       <AiTopicGenerator subjectId={subject.id} subjectName={subject.name} onAdded={onChanged} />
+
+      <BulkTopicImport subjectId={subject.id} subjectName={subject.name} onAdded={onChanged} />
 
       <div className="space-y-3">
         <p className="text-sm font-medium text-zinc-700">Add a topic manually</p>
